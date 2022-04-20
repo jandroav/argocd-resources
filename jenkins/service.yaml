@@ -1,3 +1,4 @@
+#Node Port service for the Jenkins Deployment 
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,8 +7,22 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 8080
-    targetPort: 8080
-    nodePort: 30009
+    - port: 8080
+      targetPort: 8080
+      nodePort: 32000 # NodePort can be replaced by the LoadBalancer
   selector:
-    app: jenkins-server
+    app: jenkins
+---
+# ClusterIP for the Jenkins-jnlp
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-jnlp
+  namespace: jenkins
+spec:
+  type: ClusterIP
+  ports:
+    - port: 50000
+      targetPort: 50000
+  selector:
+    app: jenkins
